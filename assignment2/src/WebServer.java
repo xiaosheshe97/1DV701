@@ -9,6 +9,10 @@ class WebServer {
             System.out.println("For running this app you need to have 2 arguments");
             System.exit(-1);
         }
+        if(!new File(args[1]).exists()){
+            System.out.println("wrong directory, check resource directory once again");
+            System.exit(-1);
+        }
 
         ServerSocket server = null;
         Socket client;
@@ -16,6 +20,10 @@ class WebServer {
 
         try {
             int port = Integer.valueOf(args[0]);
+            if(port >65535 || port <30){
+                System.out.println("Enter a valid port number between 30 to 65535");
+                System.exit(-1);
+            }
             server = new ServerSocket(port);
         }catch(NumberFormatException ex){
             System.out.println("first argument should be integer");
@@ -73,6 +81,8 @@ class ClientThread implements Runnable{
             Response response = new Response(fileName);
             response.sendResponse(socket, resource);
 
+        }catch(FileNotFoundException ex){
+            System.out.println(ex.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
         }
