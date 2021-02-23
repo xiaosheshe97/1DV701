@@ -41,9 +41,9 @@ public class Response {
             try {
                 PrintStream printStream = new PrintStream(socket.getOutputStream());
                 //set http header
-                printStream.println("Http/1.1 200 OK");
+                printStream.println("HTTP/1.1 200 OK");
 
-                printStream.println(contentType);
+                printStream.println("Content-Type:"+contentType);
                 printStream.println();
                 FileInputStream fileInputStream = new FileInputStream(file);
                 byte[] bytes = new byte[fileInputStream.available()];
