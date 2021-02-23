@@ -49,6 +49,7 @@ public class Response {
                 byte[] bytes = new byte[fileInputStream.available()];
                 fileInputStream.read(bytes);
                 printStream.write(bytes);
+                printStream.flush();
 
             } catch (IOException e) {
                 e.printStackTrace();
