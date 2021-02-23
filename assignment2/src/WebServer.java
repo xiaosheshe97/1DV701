@@ -4,11 +4,16 @@ import java.util.*;
 
 class WebServer {
     public static void main(String[] args) {
+
         ServerSocket server = null;
         Socket client;
-        int port = 8888;
+
         try {
+            int port = Integer.valueOf(args[0]);
             server = new ServerSocket(port);
+        }catch(NumberFormatException ex){
+            System.out.println("first argument should be integer");
+            System.exit(-1);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Invalid port number");
