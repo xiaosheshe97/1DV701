@@ -5,6 +5,7 @@ import java.util.*;
 class WebServer {
     public static void main(String[] args) {
         if(args.length !=2){
+            //first argument is port number, second argument is "resources"
             System.out.println("For running this app you need to have 2 arguments");
             System.exit(-1);
         }
