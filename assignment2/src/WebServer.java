@@ -4,9 +4,14 @@ import java.util.*;
 
 class WebServer {
     public static void main(String[] args) {
+        if(args.length !=2){
+            System.out.println("For running this app you need to have 2 arguments");
+            System.exit(-1);
+        }
 
         ServerSocket server = null;
         Socket client;
+        String resourceRelativePath = args[1];
 
         try {
             int port = Integer.valueOf(args[0]);
@@ -25,7 +30,7 @@ class WebServer {
                 //wait for connection
                 client = server.accept();
                 System.out.println("connect to client");
-                new Thread(new ClientThread(client)).run();
+                new Thread(new ClientThread(client,resourceRelativePath)).run();
 
             } catch (IOException e) {
                 System.out.println("cannot connect to client");
@@ -39,9 +44,12 @@ class WebServer {
  */
 class ClientThread implements Runnable{
     private Socket socket;
+    String resource ;
 
-    public ClientThread(Socket socket) {
+    public ClientThread(Socket socket, String resource) {
+
         this.socket = socket;
+        this.resource = resource;
     }
 
     @Override
@@ -62,7 +70,7 @@ class ClientThread implements Runnable{
 
 
             Response response = new Response(fileName);
-            response.sendResponse(socket);
+            response.sendResponse(socket, resource);
 
         } catch (IOException e) {
             e.printStackTrace();
