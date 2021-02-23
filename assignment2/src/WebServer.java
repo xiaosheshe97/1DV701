@@ -46,11 +46,15 @@ class ClientThread implements Runnable{
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String s = bufferedReader.readLine();
 
+            System.out.println(s);
             StringTokenizer st = new StringTokenizer(s);
             //this will return GET
             st.nextToken();
-            String fileName = st.nextToken().substring(1);
-            System.out.println("Filename -> " + fileName);
+
+            String s1 = checkReuest(st.nextToken());
+            String fileName = s1.substring(1);
+            System.out.println("Filename -> " + fileName );
+
 
             Response response = new Response(fileName);
             response.sendResponse(socket);
@@ -59,6 +63,22 @@ class ClientThread implements Runnable{
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * check the request
+     * ending /is optional
+     * if dose not requests a specific directory, shows index.html
+     * @param s
+     * @return string
+     */
+    public String checkReuest(String s){
+        if (s.endsWith("/"))
+            s = s.substring(0,s.length()-1);
+        if (s.equals("/"))
+            s = "/index.html";
+
+        return s;
     }
 }
 
