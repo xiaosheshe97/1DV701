@@ -68,14 +68,14 @@ class ClientThread implements Runnable{
     /**
      * check the request
      * ending /is optional
-     * if dose not requests a specific directory, shows index.html
+     * directory contains index.html file, then this file should be returned
      * @param s
      * @return string
      */
     public String checkReuest(String s){
         if (s.endsWith("/"))
             s = s.substring(0,s.length()-1);
-        if (s.equals("/"))
+        if (s.equals("/resources"))
             s = "/index.html";
 
         return s;
