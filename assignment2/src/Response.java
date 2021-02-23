@@ -29,10 +29,10 @@ public class Response {
      * read from disk and write into output
      * @param socket
      */
-    public void sendResponse(Socket socket){
+    public void sendResponse(Socket socket, String resource){
         checkContentType(uri);
         System.out.println(uri);
-        String filePath = path + File.separator + uri;
+        String filePath = resource + File.separator + uri;
         File file = new File(filePath);
 
         if (file.exists()){
