@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.net.Socket;
 
 public class Response {
@@ -29,17 +26,18 @@ public class Response {
      * read from disk and write into output
      * @param socket
      */
-    public void sendResponse(Socket socket, String resource){
+    public void sendResponse(Socket socket, String resource) throws IOException {
         checkContentType(uri);
         System.out.println(uri);
         String filePath = resource + File.separator + uri;
-        File file = new File(filePath);
-
-        if (file.exists()){
+       // File file = new File(filePath);
+        PrintStream printStream;
+       // if (file.exists()){
             System.out.println(filePath);
-
+        printStream = new PrintStream(socket.getOutputStream());
             try {
-                PrintStream printStream = new PrintStream(socket.getOutputStream());
+                File file = new File(filePath);
+
                 //set http header
                 printStream.println("HTTP/1.1 200 OK");
 
@@ -50,10 +48,12 @@ public class Response {
                 fileInputStream.read(bytes);
                 printStream.write(bytes);
                 printStream.flush();
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            }catch(FileNotFoundException ex){
+                printStream.println(("404 Not Found"));
             }
-        }
+            //catch (IOException e) {
+              //  e.printStackTrace();
+
+       // }
     }
 }
