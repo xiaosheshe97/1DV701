@@ -30,7 +30,7 @@ class WebServer {
             System.exit(-1);
         } catch (Exception e) {
            // e.printStackTrace();
-            System.out.println("Port number is taken");
+            System.out.println("Port is taken");
             System.exit(1);
         }
         System.out.println("Webserver is ready waiting for connection");
