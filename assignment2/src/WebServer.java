@@ -29,8 +29,8 @@ class WebServer {
             System.out.println("first argument should be integer");
             System.exit(-1);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Invalid port number");
+           // e.printStackTrace();
+            System.out.println("Port number is taken");
             System.exit(1);
         }
         System.out.println("Webserver is ready waiting for connection");
