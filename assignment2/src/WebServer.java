@@ -106,9 +106,13 @@ class ClientThread implements Runnable{
      * @return string
      */
     public String checkReuest(String s){
-        if (s.endsWith("/"))
+        if(new File("resources/"+s+"/index.html").exists()) {
+            s = s + "/index.html";
+            System.out.println("exist");
+        }
+        else if (s.endsWith("/"))
             s = s.substring(0,s.length()-1);
-        if (s.equals("/resources"))
+        else if (s.equals("/resources"))
             s = "/index.html";
 
         return s;
