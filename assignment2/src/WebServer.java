@@ -1,5 +1,6 @@
 import java.net.*;
 import java.io.*;
+import java.sql.SQLOutput;
 import java.util.*;
 
 class WebServer {
@@ -66,21 +67,29 @@ class ClientThread implements Runnable{
         try {
             //read from client
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String s = bufferedReader.readLine();
+          String s="";
+        /*  while((s= bufferedReader.readLine())!=null){
+              System.out.println(s);
 
-            System.out.println(s);
-            StringTokenizer st = new StringTokenizer(s);
-            //this will return GET
-            st.nextToken();
+          }*/
+           if((s =bufferedReader.readLine()) != null) {
+              // String s = bufferedReader.readLine();
 
-            String s1 = checkReuest(st.nextToken());
-            String fileName = s1.substring(1);
-            System.out.println("Filename -> " + fileName );
+               System.out.println(s+"        sssssssssssssss");
+              // if (s != null) {
+                   StringTokenizer st = new StringTokenizer(s);
+                   //this will return GET
+                   st.nextToken();
+
+                   String s1 = checkReuest(st.nextToken());
+                   String fileName = s1.substring(1);
+                   System.out.println("Filename -> " + fileName);
 
 
-            Response response = new Response(fileName);
-            response.sendResponse(socket, resource);
-
+                   Response response = new Response(fileName);
+                   response.sendResponse(socket, resource);
+              // }
+           }
         }catch(FileNotFoundException ex){
             System.out.println(ex.getMessage());
         } catch (IOException e) {
