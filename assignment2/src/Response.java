@@ -1,5 +1,8 @@
 import java.io.*;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Response {
     String uri;
@@ -46,6 +49,7 @@ public class Response {
         System.out.println(contentType);
        // socket.setSoTimeout(2000);
         String filePath = resource + File.separator + uri;
+        Path newPath = Paths.get(filePath);
         //System.out.println(filePath);
        // File file = new File(filePath);
         PrintStream printStream;
@@ -59,9 +63,14 @@ public class Response {
                 if(!file.exists()){
                     throw new FileNotFoundException();
 
-                }else {
-                      System.out.println(file.getAbsolutePath());
-                    System.out.println(file.getCanonicalPath());
+                }else if(!Files.isReadable(newPath)) {
+                    System.out.println("can not be read");
+                    throw new SecurityException();
+                }else{
+                     // System.out.println(file.getAbsolutePath());
+                    //System.out.println(file.getCanonicalPath());
+                    System.out.println(file.getAbsolutePath());
+
 
                     //set http header
                     printStream.println("HTTP/1.1 200 Ok");
@@ -87,6 +96,7 @@ public class Response {
             }catch(SecurityException ex){
                 String content = "<html><body><h1>403 Forbidden</h1></body></html>";
                 String header = "HTTP/1.1 403 Forbidden";
+                System.out.println("really?");
                 printStream.println(header);
                 printStream.println("Content-Type:"+contentType);
                 printStream.println();
