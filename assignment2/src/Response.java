@@ -48,7 +48,7 @@ public class Response {
         System.out.println(uri);
         System.out.println(contentType);
        // socket.setSoTimeout(2000);
-        String filePath = resource + File.separator + uri;
+        String filePath = resource + File.separator+ uri;
         Path newPath = Paths.get(filePath);
         //System.out.println(filePath);
        // File file = new File(filePath);
@@ -63,14 +63,32 @@ public class Response {
                 if(!file.exists()){
                     throw new FileNotFoundException();
 
-                }else if(!Files.isReadable(newPath)) {
+                }
+              /*  else if(Files.exists(newPath)){
+                    boolean error403=false;
+                    String[] s = filePath.split("[\\W]");
+                    for(String a :s){
+                        System.out.println("string    "+a);
+                        if(a.equals("noAccess"))
+                            error403=true;
+                    }
+                   if(error403)
+                        throw new SecurityException();
+                }*/
+                /*else if(!Files.isReadable(newPath)) {
                     System.out.println("can not be read");
                     throw new SecurityException();
-                }else{
+                }*/else{
                      // System.out.println(file.getAbsolutePath());
                     //System.out.println(file.getCanonicalPath());
+
                     System.out.println(file.getAbsolutePath());
 
+                    String[] s = filePath.split("[\\W]");
+                    for(String a :s){
+                        if(a.equals("noAccess"))
+                            throw new SecurityException();
+                    }
 
                     //set http header
                     printStream.println("HTTP/1.1 200 Ok");
