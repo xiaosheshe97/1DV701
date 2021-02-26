@@ -1,6 +1,8 @@
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -82,25 +84,42 @@ public class Response {
                      // System.out.println(file.getAbsolutePath());
                     //System.out.println(file.getCanonicalPath());
 
+                    boolean changedDirectory = false;
                     System.out.println(file.getAbsolutePath());
 
                     String[] s = filePath.split("[\\W]");
                     for(String a :s){
                         if(a.equals("noAccess"))
                             throw new SecurityException();
+                        if (a.equals("oldDirectory")){
+                            changedDirectory = true;
+                        }
                     }
 
-                    //set http header
-                    printStream.println("HTTP/1.1 200 Ok");
-                    System.out.println("here");
+                    if (changedDirectory){
+                        //set http header
+                        InetAddress ip = InetAddress.getLocalHost();
+                        uri = uri.replaceAll("old", "new");
+                        printStream.println("HTTP/1.1 302 Found");
+                        printStream.println("Location: http://" +ip.getHostAddress() +":" + socket.getLocalPort() +"/"+ uri);
+                        printStream.println("Content-Type:" + contentType);
+                        printStream.println();
+                        printStream.flush();
+                    }
+                    else {
+                        //set http header
+                        printStream.println("HTTP/1.1 200 Ok");
+                        System.out.println("here");
 
-                    printStream.println("Content-Type:" + contentType);
-                    printStream.println();
-                    FileInputStream fileInputStream = new FileInputStream(file);
-                    byte[] bytes = new byte[fileInputStream.available()];
-                    fileInputStream.read(bytes);
-                    printStream.write(bytes);
-                    printStream.flush();
+                        printStream.println("Content-Type:" + contentType);
+                        printStream.println();
+                        FileInputStream fileInputStream = new FileInputStream(file);
+                        byte[] bytes = new byte[fileInputStream.available()];
+                        fileInputStream.read(bytes);
+                        printStream.write(bytes);
+                        printStream.flush();
+                    }
+
                 }
             }catch(FileNotFoundException ex){
                 String content = "<html><body><h1>404 Not Found</h1></body></html>";
