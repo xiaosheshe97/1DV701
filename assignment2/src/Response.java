@@ -85,6 +85,8 @@ public class Response {
                     //System.out.println(file.getCanonicalPath());
 
                     boolean changedDirectory = false;
+                    boolean serverError = false;
+
                     System.out.println(file.getAbsolutePath());
 
                     String[] s = filePath.split("[\\W]");
@@ -93,6 +95,8 @@ public class Response {
                             throw new SecurityException();
                         if (a.equals("oldDirectory")){
                             changedDirectory = true;
+                        }if (a.equals("ServerError")){
+                            serverError = true;
                         }
                     }
 
@@ -101,9 +105,16 @@ public class Response {
                         InetAddress ip = InetAddress.getLocalHost();
                         uri = uri.replaceAll("old", "new");
                         printStream.println("HTTP/1.1 302 Found");
-                        printStream.println("Location: http://" +ip.getHostAddress() +":" + socket.getLocalPort() +"/"+ uri);
                         printStream.println("Content-Type:" + contentType);
                         printStream.println();
+                        printStream.flush();
+                    }else if(serverError){
+                        String content = "<html><body><h1>500 Internet Server Error</h1></body></html>";
+                        String header = "HTTP/1.1 500 Internet Server Error";
+                        printStream.println(header);
+                        printStream.println("Content-Type:"+contentType);
+                        printStream.println();
+                        printStream.write(content.getBytes());
                         printStream.flush();
                     }
                     else {
