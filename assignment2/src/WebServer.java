@@ -67,16 +67,19 @@ class ClientThread implements Runnable{
         try {
             //read from client
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-          String s="";
-        /*  while((s= bufferedReader.readLine())!=null){
-              System.out.println(s);
+            String s="";
 
-          }*/
-           if((s =bufferedReader.readLine()) != null) {
+            s =bufferedReader.readLine();
+            StringBuffer sb = new StringBuffer();
+            byte[] buf = new byte[1024];
+            int len = 0;// 每次读取到的数据的长度
+
+            sb.append(s);
+            //if( s != null) {
               // String s = bufferedReader.readLine();
-
                System.out.println(s+"        sssssssssssssss");
-              // if (s != null) {
+               if (s.contains("GET")){
+                   // if (s != null) {
                    StringTokenizer st = new StringTokenizer(s);
                    //this will return GET
                    st.nextToken();
@@ -88,8 +91,24 @@ class ClientThread implements Runnable{
 
                    Response response = new Response(fileName);
                    response.sendResponse(socket, resource);
-              // }
-           }
+                   // }
+               }
+               else if (s.contains("POST")){
+                   String r = "";
+                   while ( (r =bufferedReader.readLine()) != null) {// len值为-1时，表示没有数据了
+                       // append方法往sb对象里面添加数据
+                       sb.append(r);
+                   }
+                   System.out.println(sb.toString());
+                   UploadServer uploadServer = new UploadServer(socket, sb.toString());
+                   uploadServer.upload();
+//                   String image_path = this.getServletContext().getInitParameter("UPLOAD_IMAGE_PATH");
+//                   String dir = ServletActionContext.getRequest()
+//                   HttpServletRequest request = ServletActionContext.getRequest();
+               }
+
+
+          // }
         }catch(FileNotFoundException ex){
             System.out.println(ex.getMessage());
         } catch (IOException e) {
@@ -117,5 +136,7 @@ class ClientThread implements Runnable{
 
         return s;
     }
+
+
 }
 

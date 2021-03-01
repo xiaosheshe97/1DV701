@@ -106,6 +106,7 @@ public class Response {
                         uri = uri.replaceAll("old", "new");
                         printStream.println("HTTP/1.1 302 Found");
                         printStream.println("Content-Type:" + contentType);
+                        printStream.println("Location: http://" +ip.getHostAddress() +":" + socket.getLocalPort() +"/"+ uri);
                         printStream.println();
                         printStream.flush();
                     }else if(serverError){
