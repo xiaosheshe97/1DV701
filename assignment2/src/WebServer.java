@@ -95,11 +95,13 @@ class ClientThread implements Runnable{
                }
                else if (s.contains("POST")){
                    String r = "";
-                   while ( (r =bufferedReader.readLine()) != null) {// len值为-1时，表示没有数据了
-                       // append方法往sb对象里面添加数据
+                   while ( (r =bufferedReader.readLine()) != null) {//
                        sb.append(r);
                    }
-                   System.out.println(sb.toString());
+//                   System.out.println("HHHH");
+//                   System.out.println(sb.toString());
+                   String b = new String(sb.toString().getBytes(),"utf-8");
+                   System.out.println(b);
                    UploadServer uploadServer = new UploadServer(socket, sb.toString());
                    uploadServer.upload();
 //                   String image_path = this.getServletContext().getInitParameter("UPLOAD_IMAGE_PATH");
