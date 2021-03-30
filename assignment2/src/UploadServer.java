@@ -18,21 +18,23 @@ public class UploadServer {
 //        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 //        conn.setRequestMethod("POST");
        // System.out.println("1");
-        System.out.println(request);
+        System.out.println(" request is ==>>>>>" +request);
+        System.out.println("request finished here");
         if(request.contains("Content-Disposition:") ){
             System.out.println(2);
             if (request.contains("Content-Type:")){
                 System.out.println(3);
                 int index1 = request.indexOf("Content-Disposition:");
+
                 int index2 = request.indexOf("filename=",index1);
                 int index3 = request.indexOf("Content-Type:",index1);
-                String fileName = request.substring(index2+10,index3-1).trim();
-                System.out.println(fileName);
+                String fileName = request.substring(index2+10,index3-3).trim();
+                System.out.println("file name is hereeeeeeeeeeeee ==>" +fileName);
                 String con = request.substring(index3+23);
 
                // File uploadFile = new File("/Users/xiaohezhu/Desktop/1dv701/a2/1DV701","Apples.png" );
 
-                File file = new File("/Users/xiaohezhu/Desktop/1dv701/a2/1DV701/assignment2/resources", fileName);
+                File file = new File(fileName);
         PrintStream printStream= new PrintStream(new FileOutputStream(file));
         printStream.println("HTTP/1.1 200 Ok");
                 byte[] buffer = new byte[1024 * 1024];
