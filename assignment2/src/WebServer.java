@@ -66,12 +66,20 @@ class ClientThread implements Runnable{
     public void run() {
         try {
             //read from client
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedInputStream bufferedReader = new BufferedInputStream(socket.getInputStream());
+           // BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String s="";
 
-            s =bufferedReader.readLine();
+            byte[] buf = new byte[1024 * 1024*1024];
+
+            int r = 0;
+            r =bufferedReader.read(buf);
             StringBuffer sb = new StringBuffer();
-            byte[] buf = new byte[1024];
+            if(r != -1)
+            sb.append(new String(buf,0,r));
+            s = sb.toString();
+            System.out.println("s is ====>" + s );
+            System.out.println("s finished here");
             int len = 0;// 每次读取到的数据的长度
 
             sb.append(s);
@@ -94,13 +102,16 @@ class ClientThread implements Runnable{
                    // }
                }
                else if (s.contains("POST")){
-                   String r = "";
-                   while ( (r =bufferedReader.readLine()) != null) {//
-                       sb.append(r);
+                  // String r = "";
+                   int d = 0;
+                   while ( (d =bufferedReader.read(buf)) != -1) {//
+                       sb.append(new String(buf,0 , d));
                    }
 //                   System.out.println("HHHH");
 //                   System.out.println(sb.toString());
-                   String b = new String(sb.toString().getBytes(),"utf-8");
+                  // String b = new String(sb.toString().getBytes(),"utf-8");
+                   String b = sb.toString();
+                   System.out.println(1234567);
                    System.out.println(b);
                    UploadServer uploadServer = new UploadServer(socket, sb.toString());
                    uploadServer.upload();
